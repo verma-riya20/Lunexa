@@ -5,10 +5,9 @@ const app=express();
 app.use(cors({
     origin:process.env.CORS_ORIGIN ,
     credentials:true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ["Content-Type", "Authorization"],
 
 }))
+ // Handles preflight requests for all routes
 
 app.use(express.json({limit:"20 kb"}))
 app.use(express.urlencoded({extended:true,limit:"16 kb"}))
