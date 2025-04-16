@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -11,6 +12,7 @@ const Login = () => {
     const [loginError, setLoginError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -43,7 +45,9 @@ const Login = () => {
             );
             console.log("Login Successful:", response.data);
             alert("Login successful!");
-            navigate("/buyer-dashboard");
+            login(response.data);
+            localStorage.setItem("user", JSON.stringify(response.data));
+            navigate("/products");
         } catch (error) {
             console.error("Error:", error.response?.data || error.message);
             setLoginError(error.response?.data?.message || "Something went wrong!");

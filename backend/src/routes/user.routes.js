@@ -12,7 +12,8 @@ router.route("/logout").post(verifyJWT,logoutUser);
 router.route("/refresh-token").post(refreshAccessToken);
 //upload file
 
-//seller
+//product
+
 
 
 export default router;
