@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Products from "./pages/Products";
 import Chatbot from "./pages/Chatbot";
-import EducationPage from "./pages/Education"; // Import Education components
+import{ EducationTour, FAQAndMyths, Quiz } from "./pages/Education"; // Import Education components
 import ProductDetails from "./pages/ProductDetail";
 import Donation from "./pages/Donation";
 import Login from "./pages/Login";

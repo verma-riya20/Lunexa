@@ -15,8 +15,6 @@ router.get('/:id', async (req, res) => {
   res.json(product);
 });
 
-  // Game endpoints
-router.post("/start", verifyJWT, aiController.startGame);
-router.post("/process", verifyJWT, aiController.processResponse);
+ 
 
 export default router;

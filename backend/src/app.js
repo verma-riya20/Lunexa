@@ -5,7 +5,7 @@ dotenv.config({ path: './.env' });
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import mongoose from 'mongoose'; // Add this import at the top
+
 
 import { sessionConfig } from './config/session.config.js';
 const app=express();
