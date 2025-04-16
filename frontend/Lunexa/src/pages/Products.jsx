@@ -1,62 +1,101 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-const Products = () => {
+const ProductListPage = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/api/v1/products');
-        setProducts(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    fetch("http://localhost:8000/api/products")
+      .then(res => res.json())
+      .then(data => setProducts(data));
   }, []);
 
-  if (loading) {
-    return <div className="text-center py-20">Loading products...</div>;
-  }
+  const categories = [...new Set(products.map(p => p.category))];
+
+  const filtered = selectedCategory
+    ? products.filter(p => p.category === selectedCategory)
+    : [];
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8 text-center">Our Menstrual Products</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {products.map((product) => (
-          <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
-            <div className="h-48 bg-gray-100 flex items-center justify-center">
-              <img 
-                src={product.imageUrl} 
-                alt={product.name} 
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="p-6">
-              <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
-              <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-bold text-pink-600">${product.price}</span>
-                <Link 
-                  to={`/products/${product._id}`} 
-                  className="px-4 py-2 bg-pink-600 text-white rounded hover:bg-pink-700 transition"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
+    <div className="bg-pink-50 min-h-screen text-gray-800">
+      {/* Hero Section */}
+      <section className="bg-pink-100 py-12 px-4 text-center">
+        <motion.h1
+          className="text-4xl font-bold text-pink-700 mb-2"
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ repeat: Infinity, duration: 3 }}
+        >
+          Welcome to Menstrual Wellness
+        </motion.h1>
+        <p className="text-lg text-pink-600">
+          Choose comfort, care, and confidence during your cycle
+        </p>
+      </section>
+
+      {/* Categories */}
+      <section className="p-6">
+        <h2 className="text-2xl font-semibold text-pink-600 mb-4 text-center">Shop by Category</h2>
+        <div className="flex flex-wrap justify-center gap-6">
+          {categories.map((cat) => (
+            <motion.button
+              key={cat}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-24 h-24 flex items-center justify-center bg-white rounded-full shadow text-center text-sm font-medium text-pink-700 hover:bg-pink-100"
+              onClick={() => setSelectedCategory(cat)}
+            >
+              {cat}
+            </motion.button>
+          ))}
+        </div>
+      </section>
+
+      {/* Products */}
+      {selectedCategory && (
+        <section className="p-6">
+          <h3 className="text-xl font-semibold text-pink-600 mb-4">
+            {selectedCategory}
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {filtered.map((product, i) => (
+              <motion.div
+                key={product._id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white p-4 rounded-lg shadow hover:shadow-lg"
+              >
+                <img
+                  src={product.images[0]?.url}
+                  alt={product.name}
+                  className="w-full h-48 object-cover rounded mb-4"
+                />
+                <h4 className="text-lg font-semibold text-pink-700">{product.name}</h4>
+                <p className="text-green-600 font-bold">₹{product.price}</p>
+                <div className="mt-4 flex gap-2">
+                  <button className="bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600">
+                    Add to Cart
+                  </button>
+                  <button className="border border-pink-500 text-pink-500 px-3 py-1 rounded hover:bg-pink-100">
+                    Add to Wishlist
+                  </button>
+                  <button
+                    onClick={() => navigate(`/product/${product._id}`)}
+                    className="text-sm text-blue-600 underline"
+                  >
+                    View
+                  </button>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        ))}
-      </div>
+        </section>
+      )}
     </div>
   );
 };
 
-export default Products;
+export default ProductListPage;

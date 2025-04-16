@@ -1,75 +1,63 @@
-// src/pages/Education.jsx
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const steps = [
-    { id: 1, title: "Welcome to Menstruation Education", content: "Menstruation is a natural biological process. Let's learn everything about it step by step." },
-    { id: 2, title: "Understanding Your Cycle", content: "The menstrual cycle typically lasts around 28 days, but it can vary. Tracking your cycle can help you understand your body better." },
-    { id: 3, title: "Common Myths & Facts", content: "Many myths exist around menstruation, such as not being able to exercise. In reality, staying active can help relieve cramps." },
-    { id: 4, title: "Choosing the Right Products", content: "There are many menstrual products like pads, tampons, and menstrual cups. We will help you choose the best fit for you!" },
-    { id: 5, title: "Menstrual Hygiene", content: "Maintaining good hygiene during menstruation is crucial. Change your products regularly and stay clean." },
-    { id: 6, title: "FAQs & Myths", content: "Learn about common FAQs and bust the biggest myths about menstruation." },
-    { id: 7, title: "Quiz & Recommendations", content: "Let's test your knowledge with a quick quiz and recommend the best products based on your lifestyle." },
+const categories = [
+  { title: 'Menstrual Health Basics', icon: '💡' },
+  { title: 'Myth Busting', icon: '❌' },
+  { title: 'Sustainable Alternatives', icon: '♻️' },
+  { title: 'Period Care Tips', icon: '❤️' },
+  { title: 'PCOS & Health Issues', icon: '🩺' },
+  { title: 'Menstrual Hygiene Quiz', icon: '🎯' },
 ];
 
-export const EducationTour = () => {
-    const [stepIndex, setStepIndex] = useState(0);
-    const navigate = useNavigate();
-    
-    const nextStep = () => {
-        if (stepIndex < steps.length - 1) {
-            setStepIndex(stepIndex + 1);
-        } else {
-            navigate("/education/quiz");
-        }
-    };
+const EducationPage = () => {
+  return (
+    <div className="px-6 py-10 font-sans bg-white">
+      {/* Header Section */}
+      <div className="text-center max-w-3xl mx-auto">
+        <h1 className="text-4xl font-bold text-pink-600 mb-4">
+          Learn. Empower. Normalize.
+        </h1>
+        <p className="text-gray-700 text-lg">
+          Lunexa is your one-stop platform for menstrual health education, awareness and community. 
+          Learn everything about menstrual hygiene, sustainable products and break the stigma — all in one place.
+        </p>
+        <button className="mt-6 px-5 py-2 rounded-full bg-pink-500 text-white hover:bg-pink-600 transition">
+          Let's Explore 🔍
+        </button>
+      </div>
 
-    return (
-        <div className="p-6 bg-gradient-to-r from-pink-100 to-pink-300 min-h-screen flex flex-col justify-center items-center text-center">
-            <h1 className="text-3xl font-bold text-pink-700 mb-4">{steps[stepIndex].title}</h1>
-            <p className="text-lg text-gray-800 max-w-xl mb-6">{steps[stepIndex].content}</p>
-            <button onClick={nextStep} className="px-6 py-3 bg-pink-500 text-white rounded-lg shadow-md hover:bg-pink-600">
-                {stepIndex < steps.length - 1 ? "Next" : "Take the Quiz"}
-            </button>
-        </div>
-    );
-};
-
-export const FAQAndMyths = () => (
-    <div className="p-8 bg-white rounded-lg shadow-lg mx-4 my-6 text-center">
-        <h2 className="text-3xl font-bold text-pink-700">FAQs & Myth Busting</h2>
-        <p className="text-gray-700 mt-4">Here are answers to common questions and myths about menstruation.</p>
-        <ul className="list-disc pl-6 text-gray-700 mt-4 text-left">
-            <li><strong>Myth:</strong> You can't exercise during periods. <br/><strong>Fact:</strong> Exercise can actually help reduce cramps and improve mood.</li>
-            <li><strong>Myth:</strong> You should not take a bath during menstruation. <br/><strong>Fact:</strong> Bathing helps in hygiene and relaxation.</li>
-            <li><strong>FAQ:</strong> How often should I change my pad or tampon? <br/><strong>Answer:</strong> It is recommended to change every 4-6 hours to prevent infections.</li>
-            <li><strong>FAQ:</strong> Are menstrual cups safe? <br/><strong>Answer:</strong> Yes, they are safe, reusable, and eco-friendly.</li>
-        </ul>
+      {/* Learning Categories */}
+      <div className="mt-16">
+        <h2 className="text-2xl font-bold text-center mb-8">Explore Our Learning Categories</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {categories.map((cat, index) => (
+  <Link to={`/education/${cat.title.toLowerCase().replace(/ & /g, '-').replace(/\s+/g, '-')}`} key={index}>
+    <div className="bg-white border rounded-xl shadow hover:shadow-md transition p-6 text-center cursor-pointer">
+      <div className="text-4xl mb-2">{cat.icon}</div>
+      <h3 className="text-lg font-semibold text-gray-800">{cat.title}</h3>
     </div>
-);
+  </Link>
+))}
 
-export const Quiz = () => {
-    const [answer, setAnswer] = useState(null);
-    const navigate = useNavigate();
-    
-    const handleSubmit = () => {
-        if (answer) {
-            navigate("/education/products");
-        }
-    };
-
-    return (
-        <div className="p-6 bg-white rounded-lg shadow-lg mx-4 my-6 text-center">
-            <h2 className="text-3xl font-bold text-pink-700">Menstruation Quiz</h2>
-            <p className="text-gray-700 mt-4">What product do you prefer the most?</p>
-            <div className="mt-4">
-                <button onClick={() => setAnswer("pads")} className="px-4 py-2 bg-pink-500 text-white rounded-lg mr-2">Pads</button>
-                <button onClick={() => setAnswer("tampons")} className="px-4 py-2 bg-pink-500 text-white rounded-lg mr-2">Tampons</button>
-                <button onClick={() => setAnswer("cups")} className="px-4 py-2 bg-pink-500 text-white rounded-lg">Menstrual Cups</button>
-            </div>
-            <button onClick={handleSubmit} disabled={!answer} className="mt-4 px-6 py-3 bg-pink-500 text-white rounded-lg shadow-md hover:bg-pink-600">
-                Get Product Recommendation
-            </button>
         </div>
-    );
+      </div>
+
+      {/* Learn From Advisors Section */}
+      <div className="bg-pink-50 mt-20 p-8 rounded-xl max-w-5xl mx-auto">
+        <h3 className="text-xl font-bold text-pink-600 mb-4">Learn From Skilled Advisors</h3>
+        <p className="text-gray-700 mb-4">
+          Our certified educators and healthcare professionals are here to guide you with expert content, 
+          live webinars, and personalized awareness sessions.
+        </p>
+        <ul className="list-disc list-inside space-y-1 text-gray-800">
+          <li>🌸 Live Sessions with Doctors & Health Educators</li>
+          <li>🌸 Gamified Learning Modules</li>
+          <li>🌸 Downloadable Menstrual Toolkits</li>
+        </ul>
+      </div>
+    </div>
+  );
 };
+
+export default EducationPage;

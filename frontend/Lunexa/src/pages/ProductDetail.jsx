@@ -1,80 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 
-const ProductDetail = () => {
+const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/api/v1/products/${id}`);
-        setProduct(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching product:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
+    fetch(`http://localhost:8000/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => setProduct(data));
   }, [id]);
 
-  if (loading) {
-    return <div className="text-center py-20">Loading product details...</div>;
-  }
-
   if (!product) {
-    return <div className="text-center py-20">Product not found</div>;
+    return <div className="text-center mt-20 text-lg text-gray-600">Loading...</div>;
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-12">
-        <div className="md:w-1/2">
-          <div className="bg-gray-100 rounded-lg overflow-hidden">
-            <img 
-              src={product.imageUrl} 
-              alt={product.name} 
-              className="w-full h-auto object-cover"
-            />
+    <motion.div
+      className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow mt-10"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      <div className="flex flex-col md:flex-row gap-6">
+        <img
+          src={product.images[0]?.url}
+          alt={product.name}
+          className="w-full md:w-1/2 h-80 object-cover rounded"
+        />
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold text-pink-700">{product.name}</h1>
+          <p className="text-gray-600 mt-2">{product.description}</p>
+          <p className="text-xl text-green-600 font-semibold mt-4">₹{product.price}</p>
+
+          <div className="mt-6 flex gap-4">
+            <button className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded">
+              Add to Cart
+            </button>
+            <button className="border border-pink-500 text-pink-500 px-4 py-2 rounded hover:bg-pink-50">
+              Add to Wishlist
+            </button>
           </div>
-        </div>
-        <div className="md:w-1/2">
-          <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-          <div className="text-2xl font-bold text-pink-600 mb-6">${product.price}</div>
-          
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Description</h2>
-            <p className="text-gray-700">{product.description}</p>
+
+          <div className="mt-6 text-sm text-gray-500">
+            <p>Category: {product.category}</p>
+            <p>Stock: {product.stock}</p>
+            <p>Ratings: ⭐ {product.ratings} ({product.numOfReviews} reviews)</p>
           </div>
-          
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Category</h2>
-            <span className="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm">
-              {product.category}
-            </span>
-          </div>
-          
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Availability</h2>
-            <p className={product.stock > 0 ? 'text-green-600' : 'text-red-600'}>
-              {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-            </p>
-          </div>
-          
-          <button 
-            className="w-full py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition disabled:opacity-50"
-            disabled={product.stock <= 0}
-          >
-            {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
-          </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
-export default ProductDetail;
+export default ProductDetailPage;
