@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Products from "./pages/Products";
 import Chatbot from "./pages/Chatbot";
-import { EducationTour, FAQAndMyths, Quiz } from "./pages/Education"; // Import Education components
+import EducationPage from "./pages/Education"; // Import Education components
 import ProductDetails from "./pages/ProductDetail";
 import Donation from "./pages/Donation";
 import Login from "./pages/Login";
@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import "./index.css";
+import CategoryPage from "./pages/Category";
 
 function App() {
   return (
@@ -24,9 +25,8 @@ function App() {
           <Route path="/products" element={<ProtectedRoute><Products /></ProtectedRoute>} />
           <Route path="/products/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
           <Route path="/chatbot" element={<ProtectedRoute><Chatbot /></ProtectedRoute>} />
-          <Route path="/education" element={<ProtectedRoute><EducationTour /></ProtectedRoute>} />
-                    <Route path="/education/faq-myths" element={<ProtectedRoute><FAQAndMyths /></ProtectedRoute>} />
-                    <Route path="/education/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
+          <Route path="/education" element={<ProtectedRoute><EducationPage /></ProtectedRoute>} />
+          <Route path="/education/:category" element={<ProtectedRoute><CategoryPage /></ProtectedRoute>} />
           <Route path="/donation" element={<ProtectedRoute><Donation /></ProtectedRoute>} />
         </Routes>
       </Router>
