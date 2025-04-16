@@ -47,7 +47,7 @@ const Login = () => {
             alert("Login successful!");
             login(response.data);
             localStorage.setItem("user", JSON.stringify(response.data));
-            navigate("/products");
+            navigate("/");
         } catch (error) {
             console.error("Error:", error.response?.data || error.message);
             setLoginError(error.response?.data?.message || "Something went wrong!");
@@ -102,7 +102,7 @@ const Login = () => {
                     </button>
                 </form>
                 <p className="mt-4 text-sm text-center text-pink-600">
-                    Don't have an account? <a href="/register" className="text-pink-500 hover:underline">Register</a>
+                    Don't have an account? <a href="/signup" className="text-pink-500 hover:underline">Register</a>
                 </p>
             </div>
         </div>
