@@ -24,6 +24,6 @@ import productRoutes from './routes/product.routes.js'
 
 //routes declaration
 app.use("/api/v1/users",userRoutes)
-app.use('/api/v1/products', productRoutes);
+app.use('/api/products', productRoutes);
 
 export {app};
