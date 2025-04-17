@@ -11,35 +11,7 @@ const HomePage = () => {
   return (
     <div className="font-sans text-gray-800 overflow-hidden">
       {/* Navigation with unique style */}
-      <nav className="flex justify-between items-center p-6 max-w-7xl mx-auto relative z-10">
-        <motion.div 
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl font-bold text-pink-600 italic"
-          style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          Femine
-        </motion.div>
-        
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="hidden md:flex space-x-8 text-lg"
-        >
-          {['Home', 'About Us', 'Services', 'Pages', 'Contact Us'].map((item) => (
-            <a 
-              key={item} 
-              href="#" 
-              className="relative group hover:text-pink-600 transition-colors"
-            >
-              {item}
-              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-pink-600 transition-all group-hover:w-full"></span>
-            </a>
-          ))}
-        </motion.div>
-      </nav>
+      
 
       {/* Hero Section with creative design */}
       <section className="relative py-32 px-6">
