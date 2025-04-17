@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react"; // Add useContext import here
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
+
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -14,6 +16,7 @@ const Register = () => {
     const [passwordError, setPasswordError] = useState("");
     const navigate = useNavigate();
     const [formError, setFormError] = useState("");
+    const { login } = useContext(AuthContext); // Get login function from AuthContext
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,7 +44,8 @@ const Register = () => {
         }
 
         try {
-            const response = await axios.post("/api/v1/users/register", {
+            // 1. Register the user
+            const response = await axios.post("http://localhost:8000/api/v1/users/register", {
                 fullname: formData.name,
                 email: formData.email,
                 password: formData.password,
@@ -49,13 +53,19 @@ const Register = () => {
                 address: formData.address,
             }, { withCredentials: true });
 
-            alert("Registration successful!");
-            navigate("/buyer-dashboard");
+            // 2. Automatically log the user in after registration
+            await login({
+                name: formData.name,
+                email: formData.email,
+                // Add any other user data you want to store
+            }, response.data.token); // Assuming your API returns a token
+
+            alert("Registration successful! You are now logged in.");
+            navigate("/"); // Redirect to a protected route
         } catch (error) {
             alert(error.response?.data?.message || "Something went wrong!");
         }
     };
-
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 via-pink-200 to-pink-300 text-gray-800">
             <div className="w-full max-w-md p-10 bg-white rounded-3xl shadow-2xl border border-pink-300">
