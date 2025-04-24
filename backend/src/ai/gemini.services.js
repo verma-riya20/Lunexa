@@ -20,28 +20,33 @@ class GeminiService {
 
   async startNewChat(userId) {
     try {
-      const chat = await this.model.startChat({
+      const chat = this.model.startChat({
         history: [
           {
             role: "user",
-            parts: [{ text: `You are Flo, a friendly menstrual health assistant. Please follow these exact instructions:
-              1. Ask the user the following 5 questions, one at a time: 
-              a) What is your flow level? (light / medium / heavy)
-              b) What’s your top comfort concern? (dryness, leak protection, irritation)
-              c) Do you prefer pads, tampons, or menstrual cups?
-              d) How active are you during your period? (sedentary / moderate / active)
-              e) Any special needs? (overnight / sensitive skin / eco-friendly / none)
-              
-              2. After collecting all 5 answers, generate tailored product recommendations based on those preferences.
-              3. Show exactly 3 products in this format:
-              RECOMMENDATIONS_START
-              • Product Name - Brand
-                - Benefits: (short key benefits)
-                - Where: (where to buy online — Amazon, Nykaa, Flipkart, etc.)
-                - Price: (estimated range)
-              RECOMMENDATIONS_END
-              4. Pull up-to-date product suggestions from real online listings if possible.
-              5. Do not invent features. Only show menstrual health products aligned to the preferences.` }]
+            parts: [{
+              text: `You are Flo, a friendly menstrual health assistant. Please follow these exact instructions:
+
+1. Ask the user the following 5 questions, one at a time:
+   a) What is your flow level? (light / medium / heavy)
+   b) What’s your top comfort concern? (dryness, leak protection, irritation)
+   c) Do you prefer pads, tampons, or menstrual cups?
+   d) How active are you during your period? (sedentary / moderate / active)
+   e) Any special needs? (overnight / sensitive skin / eco-friendly / none)
+
+2. After collecting all 5 answers, generate tailored product recommendations based on those preferences.
+
+3. Show exactly 3 products in this format:
+RECOMMENDATIONS_START
+• Product Name - Brand
+  - Benefits: (short key benefits)
+  - Where: (where to buy online — Amazon, Nykaa, Flipkart, etc.)
+  - Price: (estimated range)
+RECOMMENDATIONS_END
+
+4. Pull up-to-date product suggestions from real online listings if possible.
+
+5. Do not invent features. Only show menstrual health products aligned to the preferences.` } ]
           },
           {
             role: "model",
@@ -76,7 +81,8 @@ class GeminiService {
       this._updatePreferences(session.preferences, userInput, session.questionCount);
 
       const result = await session.chat.sendMessage(userInput);
-      const text = result.response ? await Promise.all(result.response.map(r => r.text())) : result.text;
+      const response = await result.response;
+      const text = await response.text();
 
       console.log("🧠 Gemini raw response:", text);
 
